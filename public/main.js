@@ -10,40 +10,88 @@ var config = {
     },
     scene: {
         preload: preload,
-        create: create
+        create: create,
+        update: update
     }
 };
 
-let assets_root = 'assets/static';
-
 var game = new Phaser.Game(config);
+var controls;
 
 function preload ()
 {
-    this.load.setBaseURL('https://labs.phaser.io');
-
-    this.load.image('sky', `${assets_root}/skies/space3.png`);
-    this.load.image('logo', `${assets_root}/sprites/phaser3-logo.png`);
-    this.load.image('red', `${assets_root}/particles/red.png`);
+    this.load.setBaseURL('http://localhost:3000/');
+    this.load.image('sky', 'images/sky.png');
+    this.load.image('ground', 'images/ground.png');
+    this.load.spritesheet('dude', 
+        'sprites/dude.png',
+        {
+            frameWidth: 32,
+            frameHeight: 48
+        }
+    );
 }
 
 function create ()
 {
     this.add.image(400, 300, 'sky');
+    platforms = this.physics.add.staticGroup();
+    platforms.create(100, 568, 'ground').setScale(1/10).refreshBody();
 
-    var particles = this.add.particles('red');
+    player = this.physics.add.sprite(100, 450, 'dude');
 
-    var emitter = particles.createEmitter({
-        speed: 100,
-        scale: { start: 1, end: 0 },
-        blendMode: 'ADD'
+    player.setBounce(0.2);
+    player.setCollideWorldBounds(true);
+    player.body.setGravityY(10)
+
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: -1
     });
 
-    var logo = this.physics.add.image(400, 100, 'logo');
+    this.anims.create({
+        key: 'turn',
+        frames: [ { key: 'dude', frame: 4 } ],
+        frameRate: 20
+    });
 
-    logo.setVelocity(100, 200);
-    logo.setBounce(1, 1);
-    logo.setCollideWorldBounds(true);
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+        frameRate: 10,
+        repeat: -1
+    });
 
-    emitter.startFollow(logo);
+    this.physics.add.collider(player, platforms);
+    cursors = this.input.keyboard.createCursorKeys();
+}
+
+function update (time, delta)
+{
+    if (cursors.left.isDown)
+    {
+        player.setVelocityX(-160);
+
+        player.anims.play('left', true);
+    }
+    else if (cursors.right.isDown)
+    {
+        player.setVelocityX(160);
+
+        player.anims.play('right', true);
+    }
+    else
+    {
+        player.setVelocityX(0);
+
+        player.anims.play('turn');
+    }
+
+    if (cursors.up.isDown && player.body.touching.down)
+    {
+        player.setVelocityY(-330);
+    }
+
 }

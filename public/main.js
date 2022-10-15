@@ -5,7 +5,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 200 }
+            gravity: { y: 10 }
         }
     },
     scene: {
@@ -34,15 +34,24 @@ function preload ()
 
 function create ()
 {
-    this.add.image(400, 300, 'sky');
-    platforms = this.physics.add.staticGroup();
-    platforms.create(100, 568, 'ground').setScale(1/10).refreshBody();
+    // Third input is equal to the width of the game world while the fourth input is the height
+    this.cameras.main.setBounds(0, 0, 1000, 600);
+    this.physics.world.setBounds(0, 0, 1000, 600);
 
-    player = this.physics.add.sprite(100, 450, 'dude');
+
+    this.add.image(400, 300, 'sky');
+    this.add.image(800, 300, 'sky');
+    this.add.image(1200, 300, 'sky');
+
+    platforms = this.physics.add.staticGroup();
+    platforms.create(70, 590, 'ground').setScale(1/10).refreshBody();
+
+
+    player = this.physics.add.sprite(15, 450, 'dude');
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
-    player.body.setGravityY(10)
+    player.body.setGravityY(1000)
 
     this.anims.create({
         key: 'left',
@@ -66,19 +75,29 @@ function create ()
 
     this.physics.add.collider(player, platforms);
     cursors = this.input.keyboard.createCursorKeys();
+
+    this.cameras.main.startFollow(player, true, 0.10 , 0.10);
+
+    const health_bar_text = this.add.text(20, 30, 'Health:', { font: "25px Arial Black", fill: "#333333" });;
+
 }
 
 function update (time, delta)
 {
+
+    var base_movement = 100;
+    var movement_multiplier = 1.5;
+    var gravity_multiplier = 4.5;
+
     if (cursors.left.isDown)
     {
-        player.setVelocityX(-160);
+        player.setVelocityX(base_movement * -movement_multiplier);
 
         player.anims.play('left', true);
     }
     else if (cursors.right.isDown)
     {
-        player.setVelocityX(160);
+        player.setVelocityX(base_movement * movement_multiplier);
 
         player.anims.play('right', true);
     }
@@ -91,7 +110,8 @@ function update (time, delta)
 
     if (cursors.up.isDown && player.body.touching.down)
     {
-        player.setVelocityY(-330);
+        player.setVelocityY(base_movement * -gravity_multiplier);
     }
+
 
 }

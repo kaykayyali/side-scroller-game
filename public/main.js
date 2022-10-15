@@ -16,7 +16,6 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
-var controls;
 
 function preload ()
 {
@@ -30,14 +29,19 @@ function preload ()
             frameHeight: 48
         }
     );
+    this.load.tilemapTiledJSON('map1', 'tilemaps/example.json');
+    this.load.image('tiles1', 'tilemaps/super-mario.png');
 }
 
 function create ()
 {
-    this.add.image(400, 300, 'sky');
-    platforms = this.physics.add.staticGroup();
-    platforms.create(100, 568, 'ground').setScale(1/10).refreshBody();
-
+    
+    // this.add.image(400, 300, 'sky');
+    var map1 = this.make.tilemap({ key: 'map1' });
+    var tileset1 = map1.addTilesetImage('SuperMarioBros-World1-1', 'tiles1');
+    var layer1 = map1.createLayer('World1', tileset1, 0, 0);
+    cursors = this.input.keyboard.createCursorKeys();
+    
     player = this.physics.add.sprite(100, 450, 'dude');
 
     player.setBounce(0.2);
@@ -63,9 +67,6 @@ function create ()
         frameRate: 10,
         repeat: -1
     });
-
-    this.physics.add.collider(player, platforms);
-    cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update (time, delta)
@@ -93,5 +94,4 @@ function update (time, delta)
     {
         player.setVelocityY(-330);
     }
-
 }

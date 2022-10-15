@@ -2,10 +2,12 @@ var config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
+    backgroundColor: '#9adaea',
+
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 200 }
+            gravity: { y: 10 }
         }
     },
     scene: {
@@ -35,18 +37,22 @@ function preload ()
 
 function create ()
 {
-    
-    // this.add.image(400, 300, 'sky');
+    // Third input is equal to the width of the game world while the fourth input is the height
+    this.cameras.main.setBounds(0, 0, 1000, 600);
+    this.physics.world.setBounds(0, 0, 1000, 600);
+    player = this.physics.add.sprite(15, 450, 'dude');
+
     var map1 = this.make.tilemap({ key: 'map1' });
     var tileset1 = map1.addTilesetImage('SuperMarioBros-World1-1', 'tiles1');
     var layer1 = map1.createLayer('World1', tileset1, 0, 0);
     cursors = this.input.keyboard.createCursorKeys();
-    
-    player = this.physics.add.sprite(100, 450, 'dude');
+
+    // platforms = this.physics.add.staticGroup();
+    // platforms.create(70, 590, 'ground').setScale(1/10).refreshBody();
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
-    player.body.setGravityY(10)
+    player.body.setGravityY(1000)
 
     this.anims.create({
         key: 'left',
@@ -67,19 +73,32 @@ function create ()
         frameRate: 10,
         repeat: -1
     });
+
+    // this.physics.add.collider(player, platforms);
+    cursors = this.input.keyboard.createCursorKeys();
+
+    this.cameras.main.startFollow(player, true, 0.10 , 0.10);
+
+    const health_bar_text = this.add.text(20, 30, 'Health:', { font: "25px Arial Black", fill: "#333333" });;
+
 }
 
 function update (time, delta)
 {
+
+    var base_movement = 100;
+    var movement_multiplier = 1.5;
+    var gravity_multiplier = 4.5;
+
     if (cursors.left.isDown)
     {
-        player.setVelocityX(-160);
+        player.setVelocityX(base_movement * -movement_multiplier);
 
         player.anims.play('left', true);
     }
     else if (cursors.right.isDown)
     {
-        player.setVelocityX(160);
+        player.setVelocityX(base_movement * movement_multiplier);
 
         player.anims.play('right', true);
     }
@@ -92,6 +111,6 @@ function update (time, delta)
 
     if (cursors.up.isDown && player.body.touching.down)
     {
-        player.setVelocityY(-330);
+        player.setVelocityY(base_movement * -gravity_multiplier);
     }
 }

@@ -14,6 +14,7 @@ var config = {
     }
 };
 
+let assets_root = 'assets/static';
 
 var game = new Phaser.Game(config);
 
@@ -21,9 +22,9 @@ function preload ()
 {
     this.load.setBaseURL('https://labs.phaser.io');
 
-    this.load.image('sky', 'assets/skies/space3.png');
-    this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-    this.load.image('red', 'assets/particles/red.png');
+    this.load.image('sky', `${assets_root}/skies/space3.png`);
+    this.load.image('logo', `${assets_root}/sprites/phaser3-logo.png`);
+    this.load.image('red', `${assets_root}/particles/red.png`);
 }
 
 function create ()

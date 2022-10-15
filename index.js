@@ -7,7 +7,7 @@ const ENV = process.env.ENV || "dev";
 
 
 function start() {
-    app.use(serveStatic('public', { index: ['index.html'] }));
+    app.use(serveStatic('public', { index: ['pages/index.html'] }));
     app.listen(PORT);
     console.log(`Listening on ${HOST}:${PORT}`); 
 }

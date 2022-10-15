@@ -18,7 +18,6 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
-var controls;
 
 function preload ()
 {
@@ -32,6 +31,8 @@ function preload ()
             frameHeight: 48
         }
     );
+    this.load.tilemapTiledJSON('map1', 'tilemaps/example.json');
+    this.load.image('tiles1', 'tilemaps/super-mario.png');
 }
 
 function create ()
@@ -39,17 +40,15 @@ function create ()
     // Third input is equal to the width of the game world while the fourth input is the height
     this.cameras.main.setBounds(0, 0, 1000, 600);
     this.physics.world.setBounds(0, 0, 1000, 600);
-
-
-    this.add.image(400, 300, 'sky');
-    this.add.image(800, 300, 'sky');
-    this.add.image(1200, 300, 'sky');
-
-    platforms = this.physics.add.staticGroup();
-    platforms.create(70, 590, 'ground').setScale(1/10).refreshBody();
-
-
     player = this.physics.add.sprite(15, 450, 'dude');
+
+    var map1 = this.make.tilemap({ key: 'map1' });
+    var tileset1 = map1.addTilesetImage('SuperMarioBros-World1-1', 'tiles1');
+    var layer1 = map1.createLayer('World1', tileset1, 0, 0);
+    cursors = this.input.keyboard.createCursorKeys();
+
+    // platforms = this.physics.add.staticGroup();
+    // platforms.create(70, 590, 'ground').setScale(1/10).refreshBody();
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
@@ -75,13 +74,18 @@ function create ()
         repeat: -1
     });
 
-    this.physics.add.collider(player, platforms);
+    // this.physics.add.collider(player, platforms);
     cursors = this.input.keyboard.createCursorKeys();
 
     this.cameras.main.startFollow(player, true, 0.10 , 0.10);
 
-    const health_bar_text = this.add.text(20, 30, 'Health:', { font: "25px Arial Black", fill: "#333333" });;
-
+    health_bar_text = this.add.text(20, 30, 'Health:', { font: "25px Arial Black", fill: "#000000" });;
+    health_bar_text.setScrollFactor(0);
+    health_bar_outline = this.add.rectangle(175, 44, 100, 20, 0x000000);
+    
+    health_bar_outline.setScrollFactor(0);
+    health_bar = this.add.rectangle(175, 44, 93, 14, 0x00FF00);
+    health_bar.setScrollFactor(0);
 }
 
 function update (time, delta)
@@ -114,6 +118,4 @@ function update (time, delta)
     {
         player.setVelocityY(base_movement * -gravity_multiplier);
     }
-
-
 }

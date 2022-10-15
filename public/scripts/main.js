@@ -1,8 +1,9 @@
 var config = {
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS,
     width: 800,
     height: 600,
     backgroundColor: '#9adaea',
+    parent: 'phaser',
 
     physics: {
         default: 'arcade',
@@ -74,7 +75,6 @@ function create ()
         repeat: -1
     });
 
-    // this.physics.add.collider(player, platforms);
     cursors = this.input.keyboard.createCursorKeys();
 
     this.cameras.main.startFollow(player, true, 0.10 , 0.10);

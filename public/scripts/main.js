@@ -79,8 +79,13 @@ function create ()
 
     this.cameras.main.startFollow(player, true, 0.10 , 0.10);
 
-    const health_bar_text = this.add.text(20, 30, 'Health:', { font: "25px Arial Black", fill: "#333333" });;
-
+    health_bar_text = this.add.text(20, 30, 'Health:', { font: "25px Arial Black", fill: "#000000" });;
+    health_bar_text.setScrollFactor(0);
+    health_bar_outline = this.add.rectangle(175, 44, 100, 20, 0x000000);
+    
+    health_bar_outline.setScrollFactor(0);
+    health_bar = this.add.rectangle(175, 44, 93, 14, 0x00FF00);
+    health_bar.setScrollFactor(0);
 }
 
 function update (time, delta)

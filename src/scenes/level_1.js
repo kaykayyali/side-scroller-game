@@ -3,7 +3,7 @@ import Phaser from 'phaser'
 export default class Level_1 extends Phaser.Scene {
 	constructor() {
 		super({
-			key: "level_one"
+			key: "level_1"
 		})
 	}
 	
@@ -12,16 +12,26 @@ export default class Level_1 extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 		// Cameras
 		this.cameras.main.startFollow(this.player, true, 0.10 , 0.10);
+		this.keys = this.input.keyboard.addKeys({
+            k: Phaser.Input.Keyboard.KeyCodes.K,
+        });
 	}
 
 	create_health_bar() {
-		this.health_bar_text = this.add.text(20, 30, 'Health:', { font: "25px Arial Black", fill: "#000000" });;
+		this.health_bar_text = this.add.text(20, 30, 'Health:', { font: "25px Arial White", fill: "#D3D3D3" });;
 		this.health_bar_text.setScrollFactor(0);
-		this.health_bar_outline = this.add.rectangle(175, 44, 100, 20, 0x000000);
+		this.health_bar_outline = this.add.rectangle(175, 44, 100, 20, 0xD3D3D3);
 		
 		this.health_bar_outline.setScrollFactor(0);
 		this.health_bar = this.add.rectangle(175, 44, 93, 14, 0x00FF00);
 		this.health_bar.setScrollFactor(0);
+	}
+
+	handle_debug() {
+		if (this.keys.k.isDown) {
+			console.log('Debug Mode Enabled');
+			this.scene.start('debug')
+		}
 	}
 
 	create_map() {
@@ -29,7 +39,7 @@ export default class Level_1 extends Phaser.Scene {
 		this.map = this.make.tilemap({ key: 'level_1' });
 		
 		// Set Tilesets for this map
-		this.primaryTileset = this.map.addTilesetImage('Stonelands_tileset_NES', 'stonelands_tileset');
+		this.primaryTileset = this.map.addTilesetImage('Stonelands_tileset_NES', 'stonelands_tileset', 16, 16);
 
 		// Set layers
 		this.groundLayer = this.map.createLayer('ground', this.primaryTileset, 0, 0);
@@ -43,7 +53,8 @@ export default class Level_1 extends Phaser.Scene {
 
 	create_player() {
 		// Player Specific details come in here
-		this.player = this.physics.add.sprite(15, 450, 'dude');  
+		this.player = this.physics.add.sprite(15, 450, 'dude'); 
+		this.player.setScale(0.75);
 		this.player.setBounce(0.2);
 		this.player.setCollideWorldBounds(true);
 		this.player.body.setGravityY(1000)
@@ -71,21 +82,20 @@ export default class Level_1 extends Phaser.Scene {
 		});
 	}
 
+	initialize_audio() {
+		// "8bit_theme_loop" comes from the bootloader scene. 
+		// It's loaded up front to save time
+		this.music = this.sound.play('8bit_theme_loop', {
+			volume: 0.3,
+			loop: true
+		});
+	}
+
 	
 
 	preload() {
-		// "This" will be correct here
-		this.load.image('sky', 'images/sky.png');
-		this.load.image('ground', 'images/ground.png');
-		this.load.spritesheet('dude', 
-			'sprites/dude.png',
-			{
-				frameWidth: 32,
-				frameHeight: 48
-			}
-		);
-		this.load.tilemapTiledJSON('level_1', 'tilemaps/level_1.json');
-		this.load.image('stonelands_tileset', 'tilemaps/Stonelands_tileset_NES.png');
+		// used only for files specific to this map
+		// Most Files can be loaded in the bootloader. ./scenes/bootloader.js
 	}
 
 	create() {
@@ -97,19 +107,21 @@ export default class Level_1 extends Phaser.Scene {
 		this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
 
 		// This order is important!
+		this.initialize_audio();
 		this.create_player();
 		this.create_map();
 		this.create_physics();
 		this.create_controls();
 		this.define_animations();
 		this.create_health_bar();
+		
 	}
 
 	update(time, delta) {
 		this.base_movement = 100;
 		this.movement_multiplier = 1.5;
-		this.gravity_multiplier = 4.5;
-	
+		this.gravity_multiplier = 4.0;
+		this.handle_debug();
 		if (this.cursors.left.isDown) {
 			this.player.setVelocityX(this.base_movement * -this.movement_multiplier);
 			this.player.anims.play('left', true);
@@ -124,6 +136,10 @@ export default class Level_1 extends Phaser.Scene {
 		}
 	
 		if (this.cursors.up.isDown && this.player.body.onFloor()) {
+			this.sound.play('8bit_jump',{
+				volume: 0.2,
+				loop: false
+			})
 			this.player.setVelocityY(this.base_movement * -this.gravity_multiplier);
 		}
 	}

@@ -8,22 +8,22 @@ export default class Boot_Loader extends Phaser.Scene {
 	}
 
 	handleLoaderEvent() {
-		this.load.on('progress', function (value) {
-			percentText.setText(parseInt(value * 100) + '%');
-			progressBar.clear();
-			progressBar.fillStyle(0xffffff, 1);
-			progressBar.fillRect(250, 280, 300 * value, 30);
+		this.load.on('progress', (value) => {
+			this.percentText.setText(parseInt(value * 100) + '%');
+			this.progressBar.clear();
+			this.progressBar.fillStyle(0xffffff, 1);
+			this.progressBar.fillRect(250, 280, 300 * value, 30);
 		});
 		
-		this.load.on('fileprogress', function (file) {
-			assetText.setText('Loading asset: ' + file.key);
+		this.load.on('fileprogress', (file) => {
+			this.assetText.setText('Loading asset: ' + file.key);
 		});
-		this.load.on('complete', function () {
-			progressBar.destroy();
-			progressBox.destroy();
-			loadingText.destroy();
-			percentText.destroy();
-			assetText.destroy();
+		this.load.on('complete', () => {
+			this.progressBar.destroy();
+			this.progressBox.destroy();
+			this.loadingText.destroy();
+			this.percentText.destroy();
+			this.assetText.destroy();
 		});
 	}
 
@@ -37,7 +37,15 @@ export default class Boot_Loader extends Phaser.Scene {
 				frameHeight: 48
 			}
 		);
-		this.load.tilemapTiledJSON('level_1', 'tilemaps/map1.json');
+		this.load.tilemapTiledJSON('level_1', 'tilemaps/level_1.json');
+		this.load.image('stonelands_tileset', 'tilemaps/Stonelands_tileset_NES.png');
+		this.load.audio('8bit_theme_loop', ['audio/8-bit-adventure-looped.mp3']);
+		this.load.audio('8bit_jump', ['audio/8-bit-jump.mp3']);
+
+		for (var i = 0; i < 500; i++) {
+			// This is just to make it take long enough to debug the loader
+			this.load.image('logo'+i, 'images/logo-example.png');
+		}
 	}
 
 	renderProgressBar() {
@@ -49,7 +57,7 @@ export default class Boot_Loader extends Phaser.Scene {
 		this.progressBox.fillStyle(0x222222, 0.8);
 		this.progressBox.fillRect(240, 270, 320, 50);
 
-		let loadingText = this.make.text({
+		this.loadingText = this.make.text({
 			x: width / 2,
 			y: height / 2 - 50,
 			text: 'Loading...',
@@ -58,9 +66,9 @@ export default class Boot_Loader extends Phaser.Scene {
 				fill: '#ffffff'
 			}
 		});
-		loadingText.setOrigin(0.5, 0.5);
+		this.loadingText.setOrigin(0.5, 0.5);
 		
-		let percentText = this.make.text({
+		this.percentText = this.make.text({
 			x: width / 2,
 			y: height / 2 - 5,
 			text: '0%',
@@ -69,9 +77,9 @@ export default class Boot_Loader extends Phaser.Scene {
 				fill: '#ffffff'
 			}
 		});
-		percentText.setOrigin(0.5, 0.5);
+		this.percentText.setOrigin(0.5, 0.5);
 		
-		let assetText = this.make.text({
+		this.assetText = this.make.text({
 			x: width / 2,
 			y: height / 2 + 50,
 			text: '',
@@ -80,7 +88,8 @@ export default class Boot_Loader extends Phaser.Scene {
 				fill: '#ffffff'
 			}
 		});
-		assetText.setOrigin(0.5, 0.5);
+		this.assetText.setOrigin(0.5, 0.5);
+		this.handleLoaderEvent();
 	}
 
 	preload() {
@@ -90,8 +99,16 @@ export default class Boot_Loader extends Phaser.Scene {
 
 	create() {
 		this.logo = this.add.image(400, 300, 'logo');
-		setTimeout(() => {
-			this.scene.start('Level_1')
-		}, 2000)
+		this.logo.setScale(1)
+		this.tweens.add({
+			targets: [this.logo],
+			ease: 'Expo.easeIn',
+			duration: 2000,
+			alpha: 0,
+			onComplete: () => {
+			  // Handle completion
+			  this.scene.start('level_1')
+			}
+		});
 	}
 }

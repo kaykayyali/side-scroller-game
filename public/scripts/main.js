@@ -33,7 +33,7 @@ function preload ()
         }
     );
     this.load.tilemapTiledJSON('map1', 'tilemaps/map1.json');
-    this.load.image('grass', 'tilemaps/BasicGreen.png');
+    this.load.image('stone', 'tilemaps/stoneGrey.png');
 }
 
 function create ()
@@ -44,7 +44,7 @@ function create ()
     player = this.physics.add.sprite(15, 450, 'dude');
 
     var map1 = this.make.tilemap({ key: 'map1' });
-    var primaryTileset = map1.addTilesetImage('BasicGreen', 'grass');
+    var primaryTileset = map1.addTilesetImage('stoneGrey', 'stone');
     var groundLayer = map1.createLayer('ground', primaryTileset, 0, 0);
     groundLayer.setCollisionByExclusion(-1, true); 
     cursors = this.input.keyboard.createCursorKeys();

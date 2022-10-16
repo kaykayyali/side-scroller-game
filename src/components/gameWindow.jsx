@@ -6,7 +6,7 @@ const config = {
 	type: Phaser.CANVAS,
 	width: 800,
 	height: 600,
-	backgroundColor: '#9adaea',
+	backgroundColor: '#000000',
 	parent: 'phaser',
 
 	physics: {
@@ -15,7 +15,7 @@ const config = {
 			gravity: { y: 10 }
 		}
 	},
-	scene: [Level_1],
+	scene: [BootLoader, Level_1],
 }
 	
 export default config

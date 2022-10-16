@@ -32,8 +32,8 @@ function preload ()
             frameHeight: 48
         }
     );
-    this.load.tilemapTiledJSON('map1', 'tilemaps/example.json');
-    this.load.image('tiles1', 'tilemaps/super-mario.png');
+    this.load.tilemapTiledJSON('map1', 'tilemaps/map1.json');
+    this.load.image('grass', 'tilemaps/BasicGreen.png');
 }
 
 function create ()
@@ -44,8 +44,9 @@ function create ()
     player = this.physics.add.sprite(15, 450, 'dude');
 
     var map1 = this.make.tilemap({ key: 'map1' });
-    var tileset1 = map1.addTilesetImage('SuperMarioBros-World1-1', 'tiles1');
-    var layer1 = map1.createLayer('World1', tileset1, 0, 0);
+    var primaryTileset = map1.addTilesetImage('BasicGreen', 'grass');
+    var groundLayer = map1.createLayer('ground', primaryTileset, 0, 0);
+    groundLayer.setCollisionByExclusion(-1, true); 
     cursors = this.input.keyboard.createCursorKeys();
 
     // platforms = this.physics.add.staticGroup();
@@ -74,6 +75,8 @@ function create ()
         frameRate: 10,
         repeat: -1
     });
+
+    this.physics.add.collider(player, groundLayer);
 
     cursors = this.input.keyboard.createCursorKeys();
 
@@ -114,7 +117,7 @@ function update (time, delta)
         player.anims.play('turn');
     }
 
-    if (cursors.up.isDown && player.body.touching.down)
+    if (cursors.up.isDown && player.body.onFloor())
     {
         player.setVelocityY(base_movement * -gravity_multiplier);
     }

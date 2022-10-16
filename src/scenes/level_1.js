@@ -12,6 +12,9 @@ export default class Level_1 extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 		// Cameras
 		this.cameras.main.startFollow(this.player, true, 0.10 , 0.10);
+		this.keys = this.input.keyboard.addKeys({
+            k: Phaser.Input.Keyboard.KeyCodes.K,
+        });
 	}
 
 	create_health_bar() {
@@ -22,6 +25,13 @@ export default class Level_1 extends Phaser.Scene {
 		this.health_bar_outline.setScrollFactor(0);
 		this.health_bar = this.add.rectangle(175, 44, 93, 14, 0x00FF00);
 		this.health_bar.setScrollFactor(0);
+	}
+
+	handle_debug() {
+		if (this.keys.k.isDown) {
+			console.log('Debug Mode Enabled');
+			this.scene.start('debug')
+		}
 	}
 
 	create_map() {
@@ -76,7 +86,7 @@ export default class Level_1 extends Phaser.Scene {
 		// "8bit_theme_loop" comes from the bootloader scene. 
 		// It's loaded up front to save time
 		this.music = this.sound.play('8bit_theme_loop', {
-			volume: 0.5,
+			volume: 0.3,
 			loop: true
 		});
 	}
@@ -104,13 +114,14 @@ export default class Level_1 extends Phaser.Scene {
 		this.create_controls();
 		this.define_animations();
 		this.create_health_bar();
+		
 	}
 
 	update(time, delta) {
 		this.base_movement = 100;
 		this.movement_multiplier = 1.5;
 		this.gravity_multiplier = 4.0;
-	
+		this.handle_debug();
 		if (this.cursors.left.isDown) {
 			this.player.setVelocityX(this.base_movement * -this.movement_multiplier);
 			this.player.anims.play('left', true);
@@ -126,7 +137,7 @@ export default class Level_1 extends Phaser.Scene {
 	
 		if (this.cursors.up.isDown && this.player.body.onFloor()) {
 			this.sound.play('8bit_jump',{
-				volume: 0.4,
+				volume: 0.2,
 				loop: false
 			})
 			this.player.setVelocityY(this.base_movement * -this.gravity_multiplier);

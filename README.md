@@ -12,8 +12,10 @@ To install, just do npm i and then npm start
 
 ### Game Engine
 - This project is using Phaser 3, https://photonstorm.github.io/phaser3-docs/
+- Awsome examples for key properties at https://rexrainbow.github.io/phaser3-rex-notes/docs/site/ease-function/
 - Game entry point is `/src/components/gameWindow.js` 
 - Changes to the entry point file might cause some nonsense. It's good to note that using any React lifecycle functions may cause a double render in development mode.
+- Phaser is loaded as a typed module, so you can get object references and autocompletes :)
 
 ### UI
 - You can use MUI React for components, https://mui.com/material-ui/getting-started/overview/

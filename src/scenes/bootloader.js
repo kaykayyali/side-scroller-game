@@ -42,7 +42,7 @@ export default class Boot_Loader extends Phaser.Scene {
 		this.load.audio('8bit_theme_loop', ['audio/8-bit-adventure-looped.mp3']);
 		this.load.audio('8bit_jump', ['audio/8-bit-jump.mp3']);
 
-		for (var i = 0; i < 1000; i++) {
+		for (var i = 0; i < 500; i++) {
 			// This is just to make it take long enough to debug the loader
 			this.load.image('logo'+i, 'images/logo-example.png');
 		}
@@ -102,13 +102,13 @@ export default class Boot_Loader extends Phaser.Scene {
 		this.logo.setScale(1)
 		this.tweens.add({
 			targets: [this.logo],
-			ease: 'Sine.easeInOut',
-			duration: 1000,
-			alphat: 0,
+			ease: 'Expo.easeIn',
+			duration: 2000,
+			alpha: 0,
 			onComplete: () => {
 			  // Handle completion
 			  this.scene.start('level_1')
 			}
-		  });
+		});
 	}
 }

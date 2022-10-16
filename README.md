@@ -10,6 +10,10 @@ To install, just do npm i and then npm start
 - It is run automagically for you when you use the command `npm run start` or the NPM Scripts bar in VSCode
 - Sounds are Open license from https://freesound.org/
 
+### Debugging
+- On level 1, if you press the "k" key, you will open the debug scene, which lets you pick a specific scene
+- You can also hardwire it in `/src/components/gameWindow.js` by overriding the `scenes` array
+
 ### Game Engine
 - This project is using Phaser 3, https://photonstorm.github.io/phaser3-docs/
 - Awsome examples for key properties at https://rexrainbow.github.io/phaser3-rex-notes/docs/site/ease-function/

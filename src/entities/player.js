@@ -1,3 +1,4 @@
+import { DuoRounded } from '@mui/icons-material';
 import Phaser from 'phaser'
 
 export default class Player extends Phaser.Scene {
@@ -11,6 +12,7 @@ export default class Player extends Phaser.Scene {
 				frameWidth: 32,
 				frameHeight: 48
 			}
+			
 		);
 	}
 }

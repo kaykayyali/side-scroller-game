@@ -1,3 +1,4 @@
+import { Timer } from '@mui/icons-material';
 import Phaser from 'phaser'
 
 export default class Level_1 extends Phaser.Scene {
@@ -58,6 +59,8 @@ export default class Level_1 extends Phaser.Scene {
 		this.player.setBounce(0.2);
 		this.player.setCollideWorldBounds(true);
 		this.player.body.setGravityY(1000)
+		this.player.health = 5;
+
 	}
 
 	define_animations() {
@@ -142,5 +145,19 @@ export default class Level_1 extends Phaser.Scene {
 			})
 			this.player.setVelocityY(this.base_movement * -this.gravity_multiplier);
 		}
+
+
+
+		// WORKING ON HEALTH
+		if(this.cursors.down.isDown) {
+				this.player.health-=1;
+				this.health_bar.scaleX = 1/5;
+		}
+
+		if(this.player.health <= 0){
+			this.player.visible = false;
+		}
+
+
 	}
 }

@@ -61,11 +61,11 @@
         {
          "columns":17,
          "firstgid":1,
-         "image":"stoneGrey.png",
+         "image":"Stonelands_tileset_NES.png",
          "imageheight":300,
          "imagewidth":280,
          "margin":0,
-         "name":"stoneGrey",
+         "name":"Stonelands_tileset_NES",
          "spacing":0,
          "tilecount":306,
          "tileheight":16,

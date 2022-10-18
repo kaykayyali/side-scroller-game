@@ -18,6 +18,8 @@ const config = {
 			gravity: { y: 10 }
 		}
 	},
+	// The first scene is the primary. But, you should override the second scene
+	// Because the bootloader loads all of the assets
 	scene: [BootLoader, Level_1, Level_2, Level_3, Debugger],
 }
 	

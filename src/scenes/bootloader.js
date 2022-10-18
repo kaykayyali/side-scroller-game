@@ -37,6 +37,34 @@ export default class Boot_Loader extends Phaser.Scene {
 				frameHeight: 48
 			}
 		);
+		this.load.spritesheet('warrior-attack', 
+			'sprites/warrior/attack.png',
+			{
+				frameWidth: 90,
+				frameHeight: 98
+			}
+		);
+		this.load.spritesheet('warrior-idle', 
+			'sprites/warrior/idle.png',
+			{
+				frameWidth: 90,
+				frameHeight: 98
+			}
+		);
+		this.load.spritesheet('warrior-run', 
+			'sprites/warrior/run.png',
+			{
+				frameWidth: 90,
+				frameHeight: 98
+			}
+		);
+		this.load.spritesheet('warrior-jump', 
+			'sprites/warrior/jump.png',
+			{
+				frameWidth: 90,
+				frameHeight: 98
+			}
+		);
 		this.load.tilemapTiledJSON('level_1', 'tilemaps/level_1.json');
 		this.load.image('stonelands_tileset', 'tilemaps/Stonelands_tileset_NES.png');
 		this.load.audio('8bit_theme_loop', ['audio/8-bit-adventure-looped.mp3']);

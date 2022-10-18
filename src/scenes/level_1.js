@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import Warrior from 'Entities/warrior.js'
 
 export default class Level_1 extends Phaser.Scene {
 	constructor() {
@@ -64,14 +65,16 @@ export default class Level_1 extends Phaser.Scene {
 
 	create_player() {
 		// Player Specific details come in here
-		this.player = this.physics.add.sprite(15, 450, 'dude'); 
-		this.player.setScale(0.75);
+		this.player = this.physics.add.sprite(15, 450, 'warrior-idle'); 
+		this.player.setScale(1);
 		this.player.setBounce(0.2);
 		this.player.setCollideWorldBounds(true);
 		this.player.body.setGravityY(1000)
 	}
 
 	define_animations() {
+		this.warrior = new Warrior();
+		this.warrior.createAnimations(this);
 		this.anims.create({
 			key: 'left',
 			frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -142,24 +145,42 @@ export default class Level_1 extends Phaser.Scene {
 		this.movement_multiplier = 1.5;
 		this.gravity_multiplier = 4.0;
 		this.handle_debug();
+		if (this.cursors.space.isDown) {
+			this.player.sprite = 'warrior-attack';
+			this.player.anims.play('attack', true);
+			return
+		}
 		if (this.cursors.left.isDown) {
 			this.player.setVelocityX(this.base_movement * -this.movement_multiplier);
-			this.player.anims.play('left', true);
+			this.player.sprite = 'warrior-run'
+			// Flips the sprite over
+			this.player.toggleFlipX();
+			this.player.anims.play('run', true);
 		}
 		else if (this.cursors.right.isDown) {
 			this.player.setVelocityX(this.base_movement * this.movement_multiplier);
-			this.player.anims.play('right', true);
+			this.player.sprite = 'warrior-run'
+			// Sets flip state to default. the sprite I used is based on right
+			this.player.resetFlip();
+			this.player.anims.play('run', true);
+		}
+		else if (!this.player.body.onFloor() && this.player.body.velocity.x != 0) {
+			// Player is in the air, and they aren't stopped yet
+			// So dont change their animation
 		}
 		else {
 			this.player.setVelocityX(0);
-			this.player.anims.play('turn');
+			this.player.sprite = 'warrior-idle'
+			this.player.anims.play('idle');
 		}
 	
 		if (this.cursors.up.isDown && this.player.body.onFloor()) {
 			this.sound.play('8bit_jump',{
 				volume: 0.2,
 				loop: false
-			})
+			});
+			this.player.sprite = 'warrior-jump';
+			this.player.anims.play('jump', true);
 			this.player.setVelocityY(this.base_movement * -this.gravity_multiplier);
 		}
 	}

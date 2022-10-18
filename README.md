@@ -9,6 +9,7 @@ To install, just do npm i and then npm start
 - Using Webpack Dev Server, https://github.com/webpack/webpack-dev-server
 - It is run automagically for you when you use the command `npm run start` or the NPM Scripts bar in VSCode
 - Sounds are Open license from https://freesound.org/
+- Nice tool for making sprites out of images https://draeton.github.io/stitches/
 
 ### Debugging
 - On level 1, if you press the "k" key, you will open the debug scene, which lets you pick a specific scene

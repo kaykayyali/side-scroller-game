@@ -65,16 +65,18 @@ export default class Level_1 extends Phaser.Scene {
 
 	create_player() {
 		// Player Specific details come in here
-		this.player = this.physics.add.sprite(15, 450, 'warrior-idle'); 
+		this.warrior = new Warrior(this);
+		this.warrior.createAnimations();
+		// This.player IS the warrior. need to do class inheritance
+		this.player = this.physics.add.sprite(15, 450, 'warrior-idle');
 		this.player.setScale(1);
 		this.player.setBounce(0.2);
 		this.player.setCollideWorldBounds(true);
 		this.player.body.setGravityY(1000)
+		this.player.anims.play('idle');
 	}
 
 	define_animations() {
-		this.warrior = new Warrior();
-		this.warrior.createAnimations(this);
 		this.anims.create({
 			key: 'left',
 			frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -164,14 +166,8 @@ export default class Level_1 extends Phaser.Scene {
 			this.player.resetFlip();
 			this.player.anims.play('run', true);
 		}
-		else if (!this.player.body.onFloor() && this.player.body.velocity.x != 0) {
-			// Player is in the air, and they aren't stopped yet
-			// So dont change their animation
-		}
 		else {
 			this.player.setVelocityX(0);
-			this.player.sprite = 'warrior-idle'
-			this.player.anims.play('idle');
 		}
 	
 		if (this.cursors.up.isDown && this.player.body.onFloor()) {
@@ -183,5 +179,7 @@ export default class Level_1 extends Phaser.Scene {
 			this.player.anims.play('jump', true);
 			this.player.setVelocityY(this.base_movement * -this.gravity_multiplier);
 		}
+
+		console.log(this.player.sprite)
 	}
 }

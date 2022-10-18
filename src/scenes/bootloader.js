@@ -45,10 +45,10 @@ export default class Boot_Loader extends Phaser.Scene {
 			}
 		);
 		this.load.spritesheet('warrior-idle', 
-			'sprites/warrior/idle.png',
+			'sprites/warrior/idle_v2.png',
 			{
 				frameWidth: 90,
-				frameHeight: 98
+				frameHeight: 90
 			}
 		);
 		this.load.spritesheet('warrior-run', 

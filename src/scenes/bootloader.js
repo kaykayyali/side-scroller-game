@@ -41,8 +41,12 @@ export default class Boot_Loader extends Phaser.Scene {
 		this.load.image('stonelands_tileset', 'tilemaps/Stonelands_tileset_NES.png');
 		this.load.audio('8bit_theme_loop', ['audio/8-bit-adventure-looped.mp3']);
 		this.load.audio('8bit_jump', ['audio/8-bit-jump.mp3']);
+		this.load.spritesheet('cube', 'sprites/cube.png', {
+			frameWidth: 60,
+			frameHeight: 60
+		});
 
-		for (var i = 0; i < 500; i++) {
+		for (var i = 0; i < 250; i++) {
 			// This is just to make it take long enough to debug the loader
 			this.load.image('logo'+i, 'images/logo-example.png');
 		}

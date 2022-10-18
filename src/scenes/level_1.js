@@ -42,7 +42,18 @@ export default class Level_1 extends Phaser.Scene {
 		this.primaryTileset = this.map.addTilesetImage('Stonelands_tileset_NES', 'stonelands_tileset', 16, 16);
 
 		// Set layers
-		this.groundLayer = this.map.createLayer('ground', this.primaryTileset, 0, 0);
+		this.groundLayer = this.map.createLayer('ground', this.primaryTileset);
+		this.enemySpawnLayer = this.map.createFromObjects('spawn map', {
+			id: 3
+		});
+	}
+
+	generateSpawns() {
+		this.spawns = this.map.createFromObjects('spawn map', 3, 'cube', 0, true, false, this.spawns, {
+			name: 'spawn map',
+			key: 'cube'
+		});
+		this.anims.play('spin', this.spawns);
 	}
 
 	create_physics() {
@@ -80,6 +91,14 @@ export default class Level_1 extends Phaser.Scene {
 			frameRate: 10,
 			repeat: -1
 		});
+
+		this.anims.create({
+			key: 'spin',
+			frames: this.anims.generateFrameNumbers('cube', { start: 1, end: 30 }),
+			frameRate: 12,
+			repeat: -1,
+			yoyo: true
+		});
 	}
 
 	initialize_audio() {
@@ -113,6 +132,7 @@ export default class Level_1 extends Phaser.Scene {
 		this.create_physics();
 		this.create_controls();
 		this.define_animations();
+		this.generateSpawns();
 		this.create_health_bar();
 		
 	}

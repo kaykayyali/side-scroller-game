@@ -9,7 +9,7 @@ const config = {
 	type: Phaser.CANVAS,
 	width: 800,
 	height: 600,
-	backgroundColor: '#000000',
+	backgroundColor: '#049cd8',
 	parent: 'phaser',
 
 	physics: {

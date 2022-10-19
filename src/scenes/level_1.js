@@ -165,6 +165,6 @@ export default class Level_1 extends Phaser.Scene {
 			this.player.visible = false;
 		}
 
-
+	
 	}
 }

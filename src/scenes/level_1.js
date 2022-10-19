@@ -1,5 +1,7 @@
 import { Timer } from '@mui/icons-material';
 import Phaser from 'phaser'
+import Warrior from 'Entities/warrior.js'
+import CustomConstants from "PhaserClasses/CustomConstants";
 
 export default class Level_1 extends Phaser.Scene {
 	constructor() {
@@ -12,7 +14,16 @@ export default class Level_1 extends Phaser.Scene {
 		// Button input reading
 		this.cursors = this.input.keyboard.createCursorKeys();
 		// Cameras
-		this.cameras.main.startFollow(this.player, true, 0.10 , 0.10);
+		this.cameras.main.startFollow(this.player, true, 1.0 , 1.00);
+		const tweenConfig = {
+			targets: this.cameras.main,
+			zoom: 2,
+			duration: 2000,
+			ease: 'Sine.easeIn',
+			repeat: 0
+		}
+		
+		this.tweens.add(tweenConfig);
 		this.keys = this.input.keyboard.addKeys({
             k: Phaser.Input.Keyboard.KeyCodes.K,
         });
@@ -44,50 +55,34 @@ export default class Level_1 extends Phaser.Scene {
 
 		// Set layers
 		this.groundLayer = this.map.createLayer('ground', this.primaryTileset, 0, 0);
+		this.groundLayer.setCollisionByExclusion(-1, true);		
+	}
+
+	generateSpawns() {
+		this.spawns = this.map.createFromObjects('spawn map', 3, 'cube', 0, true, false, this.spawns, {
+			name: 'spawn map',
+			key: 'cube'
+		});
+		this.anims.create({
+			key: 'spin',
+			frames: this.anims.generateFrameNumbers('cube', { start: 1, end: 30 }),
+			frameRate: 12,
+			repeat: -1,
+			yoyo: true
+		});
+		this.anims.play('spin', this.spawns);
 	}
 
 	create_physics() {
 		// physics collisions and tracking should be done here.
-		this.groundLayer.setCollisionByExclusion(-1, true);
+		this.physics.add.existing(this.player);
 		this.physics.add.collider(this.player, this.groundLayer);
+		console.log(this.player)
 	}
 
 	create_player() {
 		// Player Specific details come in here
-		this.player = this.physics.add.sprite(15, 450, 'dude'); 
-		this.player.setScale(0.75);
-		this.player.setBounce(0.2);
-		this.player.setCollideWorldBounds(true);
-		this.player.body.setGravityY(1000)
-
-		//Player State
-		this.player.state ={
-			health : 5,
-			invincibility: 0
-		}
-
-	}
-
-	define_animations() {
-		this.anims.create({
-			key: 'left',
-			frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-			frameRate: 10,
-			repeat: -1
-		});
-	
-		this.anims.create({
-			key: 'turn',
-			frames: [ { key: 'dude', frame: 4 } ],
-			frameRate: 20
-		});
-	
-		this.anims.create({
-			key: 'right',
-			frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-			frameRate: 10,
-			repeat: -1
-		});
+		this.player = new Warrior(this, 15, 350);
 	}
 
 	initialize_audio() {
@@ -110,7 +105,7 @@ export default class Level_1 extends Phaser.Scene {
 			
 		// Third input is equal to the width of the game world while the fourth input is the height
 		let worldHeight = 600;
-		let worldWidth = 1600
+		let worldWidth = 2000
 		this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
 		this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
 		var time;
@@ -121,50 +116,13 @@ export default class Level_1 extends Phaser.Scene {
 		this.create_map();
 		this.create_physics();
 		this.create_controls();
-		this.define_animations();
+		this.generateSpawns();
 		this.create_health_bar();
 		
 	}
 
 	update(time, delta) {
-		this.base_movement = 100;
-		this.movement_multiplier = 1.5;
-		this.gravity_multiplier = 4.0;
+		this.player.update(time, delta);
 		this.handle_debug();
-		if (this.cursors.left.isDown) {
-			this.player.setVelocityX(this.base_movement * -this.movement_multiplier);
-			this.player.anims.play('left', true);
-		}
-		else if (this.cursors.right.isDown) {
-			this.player.setVelocityX(this.base_movement * this.movement_multiplier);
-			this.player.anims.play('right', true);
-		}
-		else {
-			this.player.setVelocityX(0);
-			this.player.anims.play('turn');
-		}
-	
-		if (this.cursors.up.isDown && this.player.body.onFloor()) {
-			this.sound.play('8bit_jump',{
-				volume: 0.2,
-				loop: false
-			})
-			this.player.setVelocityY(this.base_movement * -this.gravity_multiplier);
-		}
-
-
-
-		// WORKING ON HEALTH
-
-		if(this.cursors.down.isDown) {
-				this.player.state.health-=1;
-		}
-
-
-		if(this.player.state.health <= 0){
-			this.player.visible = false;
-		}
-
-	
 	}
 }

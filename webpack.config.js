@@ -8,6 +8,7 @@ module.exports = {
 	},
 	resolve: {
 		alias: {
+			PhaserClasses: path.resolve(__dirname, 'src/phaserClasses/'),
 			Components: path.resolve(__dirname, 'src/components/'),
 			Entities: path.resolve(__dirname, 'src/entities/'),
 			Scenes: path.resolve(__dirname, 'src/scenes/'),

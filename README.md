@@ -9,6 +9,7 @@ To install, just do npm i and then npm start
 - Using Webpack Dev Server, https://github.com/webpack/webpack-dev-server
 - It is run automagically for you when you use the command `npm run start` or the NPM Scripts bar in VSCode
 - Sounds are Open license from https://freesound.org/
+- Nice tool for making sprites out of images https://draeton.github.io/stitches/
 
 ### Debugging
 - On level 1, if you press the "k" key, you will open the debug scene, which lets you pick a specific scene
@@ -17,6 +18,7 @@ To install, just do npm i and then npm start
 ### Game Engine
 - This project is using Phaser 3, https://photonstorm.github.io/phaser3-docs/
 - Awsome examples for key properties at https://rexrainbow.github.io/phaser3-rex-notes/docs/site/ease-function/
+- More useful docs, with plenty of config examples https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.CreateFromObjectLayerConfig
 - Game entry point is `/src/components/gameWindow.js` 
 - Changes to the entry point file might cause some nonsense. It's good to note that using any React lifecycle functions may cause a double render in development mode.
 - Phaser is loaded as a typed module, so you can get object references and autocompletes :)

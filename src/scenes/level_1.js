@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import Warrior from 'Entities/warrior.js'
+import CustomConstants from "PhaserClasses/CustomConstants";
 
 export default class Level_1 extends Phaser.Scene {
 	constructor() {
@@ -43,7 +44,8 @@ export default class Level_1 extends Phaser.Scene {
 		this.primaryTileset = this.map.addTilesetImage('Stonelands_tileset_NES', 'stonelands_tileset', 16, 16);
 
 		// Set layers
-		this.groundLayer = this.map.createLayer('ground', this.primaryTileset);
+		this.groundLayer = this.map.createLayer('ground', this.primaryTileset, 0, 0);
+		this.groundLayer.setCollisionByExclusion(-1, true);
 		this.enemySpawnLayer = this.map.createFromObjects('spawn map', {
 			id: 3
 		});
@@ -59,21 +61,13 @@ export default class Level_1 extends Phaser.Scene {
 
 	create_physics() {
 		// physics collisions and tracking should be done here.
-		this.groundLayer.setCollisionByExclusion(-1, true);
 		this.physics.add.collider(this.player, this.groundLayer);
+		console.log(this.player)
 	}
 
 	create_player() {
 		// Player Specific details come in here
-		this.warrior = new Warrior(this);
-		this.warrior.createAnimations();
-		// This.player IS the warrior. need to do class inheritance
-		this.player = this.physics.add.sprite(15, 450, 'warrior-idle');
-		this.player.setScale(1);
-		this.player.setBounce(0.2);
-		this.player.setCollideWorldBounds(true);
-		this.player.body.setGravityY(1000)
-		this.player.anims.play('idle');
+		this.player = new Warrior(this, 15, 350);
 	}
 
 	define_animations() {
@@ -126,7 +120,7 @@ export default class Level_1 extends Phaser.Scene {
 			
 		// Third input is equal to the width of the game world while the fourth input is the height
 		let worldHeight = 600;
-		let worldWidth = 1600
+		let worldWidth = 2000
 		this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
 		this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
 
@@ -143,43 +137,7 @@ export default class Level_1 extends Phaser.Scene {
 	}
 
 	update(time, delta) {
-		this.base_movement = 100;
-		this.movement_multiplier = 1.5;
-		this.gravity_multiplier = 4.0;
+		this.player.update(time, delta);
 		this.handle_debug();
-		if (this.cursors.space.isDown) {
-			this.player.sprite = 'warrior-attack';
-			this.player.anims.play('attack', true);
-			return
-		}
-		if (this.cursors.left.isDown) {
-			this.player.setVelocityX(this.base_movement * -this.movement_multiplier);
-			this.player.sprite = 'warrior-run'
-			// Flips the sprite over
-			this.player.toggleFlipX();
-			this.player.anims.play('run', true);
-		}
-		else if (this.cursors.right.isDown) {
-			this.player.setVelocityX(this.base_movement * this.movement_multiplier);
-			this.player.sprite = 'warrior-run'
-			// Sets flip state to default. the sprite I used is based on right
-			this.player.resetFlip();
-			this.player.anims.play('run', true);
-		}
-		else {
-			this.player.setVelocityX(0);
-		}
-	
-		if (this.cursors.up.isDown && this.player.body.onFloor()) {
-			this.sound.play('8bit_jump',{
-				volume: 0.2,
-				loop: false
-			});
-			this.player.sprite = 'warrior-jump';
-			this.player.anims.play('jump', true);
-			this.player.setVelocityY(this.base_movement * -this.gravity_multiplier);
-		}
-
-		console.log(this.player.sprite)
 	}
 }

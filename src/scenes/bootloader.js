@@ -37,32 +37,11 @@ export default class Boot_Loader extends Phaser.Scene {
 				frameHeight: 48
 			}
 		);
-		this.load.spritesheet('warrior-attack', 
-			'sprites/warrior/attack.png',
-			{
-				frameWidth: 90,
-				frameHeight: 98
-			}
-		);
-		this.load.spritesheet('warrior-idle', 
+		this.load.spritesheet('warrior', 
 			'sprites/warrior/idle_v2.png',
 			{
 				frameWidth: 90,
 				frameHeight: 90
-			}
-		);
-		this.load.spritesheet('warrior-run', 
-			'sprites/warrior/run.png',
-			{
-				frameWidth: 90,
-				frameHeight: 98
-			}
-		);
-		this.load.spritesheet('warrior-jump', 
-			'sprites/warrior/jump.png',
-			{
-				frameWidth: 90,
-				frameHeight: 98
 			}
 		);
 		this.load.tilemapTiledJSON('level_1', 'tilemaps/level_1.json');
@@ -74,7 +53,7 @@ export default class Boot_Loader extends Phaser.Scene {
 			frameHeight: 60
 		});
 
-		for (var i = 0; i < 250; i++) {
+		for (var i = 0; i < 50; i++) {
 			// This is just to make it take long enough to debug the loader
 			this.load.image('logo'+i, 'images/logo-example.png');
 		}
@@ -135,7 +114,7 @@ export default class Boot_Loader extends Phaser.Scene {
 		this.tweens.add({
 			targets: [this.logo],
 			ease: 'Expo.easeIn',
-			duration: 2000,
+			duration: 1000,
 			alpha: 0,
 			onComplete: () => {
 			  // Handle completion

@@ -14,6 +14,15 @@ export default class Level_1 extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 		// Cameras
 		this.cameras.main.startFollow(this.player, true, 1.0 , 1.00);
+		const tweenConfig = {
+			targets: this.cameras.main,
+			zoom: 2,
+			duration: 2000,
+			ease: 'Sine.easeIn',
+			repeat: 0
+		}
+		
+		this.tweens.add(tweenConfig);
 		this.keys = this.input.keyboard.addKeys({
             k: Phaser.Input.Keyboard.KeyCodes.K,
         });
@@ -53,7 +62,6 @@ export default class Level_1 extends Phaser.Scene {
 			name: 'spawn map',
 			key: 'cube'
 		});
-		console.log(this.spawns)
 		this.anims.create({
 			key: 'spin',
 			frames: this.anims.generateFrameNumbers('cube', { start: 1, end: 30 }),

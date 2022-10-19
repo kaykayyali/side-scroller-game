@@ -27,6 +27,13 @@ export default class Humanoid extends Phaser.Physics.Arcade.Sprite {
 		this.setBounce(CONSTANTS.humanoid.bounceRate);
 		this.body.setGravityY(CONSTANTS.humanoid.gravity)
 		this.setCollideWorldBounds(true);
+		this.setScale(1);
+		this.updatePhysicsSize();
+	}
+
+	updatePhysicsSize() {
+		// You need to override this function, and explain to phaser the size and center of the sprite
+		throw Error("Physics Size Handler not defined");
 	}
 	
 	handleTakeDamage(value) {

@@ -13,7 +13,7 @@ export default class Level_1 extends Phaser.Scene {
 		// Button input reading
 		this.cursors = this.input.keyboard.createCursorKeys();
 		// Cameras
-		this.cameras.main.startFollow(this.player, true, 0.10 , 0.10);
+		this.cameras.main.startFollow(this.player, true, 1.0 , 1.00);
 		this.keys = this.input.keyboard.addKeys({
             k: Phaser.Input.Keyboard.KeyCodes.K,
         });
@@ -45,10 +45,7 @@ export default class Level_1 extends Phaser.Scene {
 
 		// Set layers
 		this.groundLayer = this.map.createLayer('ground', this.primaryTileset, 0, 0);
-		this.groundLayer.setCollisionByExclusion(-1, true);
-		this.enemySpawnLayer = this.map.createFromObjects('spawn map', {
-			id: 3
-		});
+		this.groundLayer.setCollisionByExclusion(-1, true);		
 	}
 
 	generateSpawns() {
@@ -56,41 +53,7 @@ export default class Level_1 extends Phaser.Scene {
 			name: 'spawn map',
 			key: 'cube'
 		});
-		this.anims.play('spin', this.spawns);
-	}
-
-	create_physics() {
-		// physics collisions and tracking should be done here.
-		this.physics.add.collider(this.player, this.groundLayer);
-		console.log(this.player)
-	}
-
-	create_player() {
-		// Player Specific details come in here
-		this.player = new Warrior(this, 15, 350);
-	}
-
-	define_animations() {
-		this.anims.create({
-			key: 'left',
-			frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-			frameRate: 10,
-			repeat: -1
-		});
-	
-		this.anims.create({
-			key: 'turn',
-			frames: [ { key: 'dude', frame: 4 } ],
-			frameRate: 20
-		});
-	
-		this.anims.create({
-			key: 'right',
-			frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-			frameRate: 10,
-			repeat: -1
-		});
-
+		console.log(this.spawns)
 		this.anims.create({
 			key: 'spin',
 			frames: this.anims.generateFrameNumbers('cube', { start: 1, end: 30 }),
@@ -98,6 +61,19 @@ export default class Level_1 extends Phaser.Scene {
 			repeat: -1,
 			yoyo: true
 		});
+		this.anims.play('spin', this.spawns);
+	}
+
+	create_physics() {
+		// physics collisions and tracking should be done here.
+		this.physics.add.existing(this.player);
+		this.physics.add.collider(this.player, this.groundLayer);
+		console.log(this.player)
+	}
+
+	create_player() {
+		// Player Specific details come in here
+		this.player = new Warrior(this, 15, 350);
 	}
 
 	initialize_audio() {
@@ -130,7 +106,6 @@ export default class Level_1 extends Phaser.Scene {
 		this.create_map();
 		this.create_physics();
 		this.create_controls();
-		this.define_animations();
 		this.generateSpawns();
 		this.create_health_bar();
 		

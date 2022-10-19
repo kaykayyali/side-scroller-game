@@ -1,10 +1,10 @@
 import Phaser from "phaser";
 import CONSTANTS from "PhaserClasses/CustomConstants";
-import User from "PhaserClasses/User";
+import Humanoid from "PhaserClasses/Humanoid";
 
-export default class Warrior extends User {
+export default class Warrior extends Humanoid {
 	constructor(scene, x, y){
-		super (scene, null, x, y)
+		super (scene, 'warrior', x, y)
 		this.setAnimations();
 	}
 	setAnimations() {
@@ -16,6 +16,11 @@ export default class Warrior extends User {
 			yoyo: true
 		});
 		this.anims.play('idle');
+	}
+	updatePhysicsSize(){
+		this.setBodySize(30,60)
+		this.setOffset(30,30)
+		this.setScale(0.5);
 	}
 	update(time, delta) {
 		if (delta > 10) {

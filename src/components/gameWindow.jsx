@@ -15,6 +15,8 @@ const config = {
 	physics: {
 		default: 'arcade',
 		arcade: {
+			// Turn this on to view phsyics boxes
+			// debug: true,
 			gravity: { y: 10 }
 		}
 	},

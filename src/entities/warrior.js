@@ -23,7 +23,7 @@ export default class Warrior extends Humanoid {
 		this.setScale(0.5);
 	}
 	update(time, delta) {
-		if (delta > 10) {
+		if (delta > 100) {
 			console.warn('[Performance]Large Tick Detected')
 		}
 		let scene = this.scene

@@ -1,7 +1,7 @@
-import { Timer } from '@mui/icons-material';
 import Phaser from 'phaser'
 import Warrior from 'Entities/warrior.js'
 import CustomConstants from "PhaserClasses/CustomConstants";
+import Healthbar from 'Entities/Healthbar'
 
 export default class Level_1 extends Phaser.Scene {
 	constructor() {
@@ -15,28 +15,23 @@ export default class Level_1 extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 		// Cameras
 		this.cameras.main.startFollow(this.player, true, 1.0 , 1.00);
-		const tweenConfig = {
-			targets: this.cameras.main,
-			zoom: 2,
-			duration: 2000,
-			ease: 'Sine.easeIn',
-			repeat: 0
-		}
-		
-		this.tweens.add(tweenConfig);
+
+		// const tweenConfig = {
+		// 	targets: this.cameras.main,
+		// 	zoom: 2,
+		// 	duration: 2000,
+		// 	ease: 'Sine.easeIn',
+		// 	repeat: 0
+		// }
+		// this.tweens.add(tweenConfig);
+
 		this.keys = this.input.keyboard.addKeys({
             k: Phaser.Input.Keyboard.KeyCodes.K,
         });
 	}
 
 	create_health_bar() {
-		this.health_bar_text = this.add.text(20, 30, 'Health:', { font: "25px Arial White", fill: "#D3D3D3" });;
-		this.health_bar_text.setScrollFactor(0);
-		this.health_bar_outline = this.add.rectangle(175, 44, 100, 20, 0xD3D3D3);
-		
-		this.health_bar_outline.setScrollFactor(0);
-		this.health_bar = this.add.rectangle(175, 44, 93, 14, 0x00FF00);
-		this.health_bar.setScrollFactor(0);
+		this.Healthbar = new Healthbar(this, 175, 44);
 	}
 
 	handle_debug() {
@@ -63,6 +58,7 @@ export default class Level_1 extends Phaser.Scene {
 			name: 'spawn map',
 			key: 'cube'
 		});
+		console.log(this.spawns)
 		this.anims.create({
 			key: 'spin',
 			frames: this.anims.generateFrameNumbers('cube', { start: 1, end: 30 }),

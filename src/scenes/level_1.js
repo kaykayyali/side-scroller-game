@@ -59,7 +59,12 @@ export default class Level_1 extends Phaser.Scene {
 		this.player.setBounce(0.2);
 		this.player.setCollideWorldBounds(true);
 		this.player.body.setGravityY(1000)
-		this.player.health = 5;
+
+		//Player State
+		this.player.state ={
+			health : 5,
+			invincibility: 0
+		}
 
 	}
 
@@ -108,6 +113,7 @@ export default class Level_1 extends Phaser.Scene {
 		let worldWidth = 1600
 		this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
 		this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
+		var time;
 
 		// This order is important!
 		this.initialize_audio();
@@ -149,12 +155,13 @@ export default class Level_1 extends Phaser.Scene {
 
 
 		// WORKING ON HEALTH
+
 		if(this.cursors.down.isDown) {
-				this.player.health-=1;
-				this.health_bar.scaleX = 1/5;
+				this.player.state.health-=1;
 		}
 
-		if(this.player.health <= 0){
+
+		if(this.player.state.health <= 0){
 			this.player.visible = false;
 		}
 
